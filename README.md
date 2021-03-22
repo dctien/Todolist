@@ -1,3 +1,6 @@
+<!-- componentWillReceiveProps has been renamed
+https://stackoverflow.com/questions/58924617/componentwillreceiveprops-has-been-renamed -->
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>

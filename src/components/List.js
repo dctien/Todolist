@@ -1,7 +1,17 @@
 import React, { Component } from 'react'
+import Item from '../components/Item'
 
 export default class List extends Component {
     render() {
+        let items = this.props.items
+        let eleItem = items.map((item,index)=>{
+            return(
+                <Item 
+                    item  = {item}
+                    key   = {index}
+                    index = {index}/>
+            )
+        })
         return (
             <div className="panel panel-success">
                 <div className="panel-heading">List Task</div>
@@ -15,15 +25,7 @@ export default class List extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="text-center">1</td>
-                            <td></td>
-                            <td className="text-center"><span className="label label-danger">High</span></td>
-                            <td>
-                                <button type="button" className="btn btn-warning">Edit</button>
-                                <button type="button" className="btn btn-danger">Delete</button>
-                            </td>
-                        </tr>
+                        {eleItem}
                     </tbody>
                 </table>
             </div>

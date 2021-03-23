@@ -5,25 +5,50 @@ import Form from './components/Form'
 import List from './components/List'
 import items from './Mock/Task'
 
+import {filter, includes, orderBy} from 'lodash'
+
 export default class App extends Component {
 	constructor(props){
         super(props)
         this.state = {
-            isShowForm: false,
-			items: items
+            isShowForm	: false,
+			items		: items,
+			strSearch	: '',
+			sort_by		:'name',
+            sort_dir	:'asc'
         }
-		this.handleToogleForm = this.handleToogleForm.bind(this)
+		this.handleToogleForm 	= this.handleToogleForm.bind(this)
+		this.handleSearch 		= this.handleSearch.bind(this)
     }
 	handleToogleForm(){
 		this.setState({
 			isShowForm: !this.state.isShowForm
 		})
 	}
+	handleSearch(value){
+		this.setState({strSearch: value})  
+	}
+	handleSort=(sort_by,sort_dir)=>{
+		this.setState({
+			sort_by: sort_by,
+			sort_dir: sort_dir
+		})
+	}
 	render() {
-		console.log(this.state.items)
-		let isShowForm = this.state.isShowForm
-		let items = this.state.items
-		let eleForm = null
+		let {isShowForm, strSearch,sort_by, sort_dir} = this.state
+		let itemOrgin 	= [...this.state.items]
+		let items 		= []
+		let eleForm 	= null
+		
+
+		// // Search item 
+		items = filter(itemOrgin,(item)=>{
+			return includes(item.name.toLowerCase(),strSearch.toLowerCase())
+		})
+		
+		// //Sort
+		items = orderBy(items,[sort_by],[sort_dir])
+
 		if (isShowForm) {
 			eleForm = <Form/>
 		}
@@ -35,8 +60,12 @@ export default class App extends Component {
 
 				{/* CONTROL (SEARCH + SORT + ADD) : START */}
 				<Control
-					onClickAdd={this.handleToogleForm}
-					isShowForm={isShowForm}/>
+					onClickSearch 	= {this.handleSearch}
+					onClickAdd		= {this.handleToogleForm}
+					isShowForm		= {isShowForm}
+					sort_by			= {sort_by}
+					sort_dir		= {sort_dir}
+					handleSort		= {this.handleSort}/>
 				{/* CONTROL (SEARCH + SORT + ADD) : END */}
 
 				{/* FORM : START */}

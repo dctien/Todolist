@@ -8,8 +8,13 @@ let items = [
     },
     {
         id: uuidv4(),
-        name: 'Vũ Thị Khánh Chi',
+        name: 'i ê ',
         level: 2
+    },
+    {
+        id: uuidv4(),
+        name: '321adzxcz ',
+        level: 0
     },
     {
         id: uuidv4(),

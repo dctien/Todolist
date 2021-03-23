@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tsuyoshiwada/htmltojsx": "0.0.5",
+    "lodash": "^4.17.21",
     "react": "^16.0.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.0.0",

@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import Item from '../components/Item'
+import Item from './Item'
 
 export default class List extends Component {
     render() {
-        let items = this.props.items
-        let eleItem = items.map((item,index)=>{
+        const items = this.props.items
+        const eleItem = items.map((item,index)=>{
             return(
                 <Item 
+                    clickDelete = {this.props.onClickDelete}
                     item  = {item}
                     key   = {index}
-                    index = {index}/>
+                    index = {index}
+                />
             )
         })
         return (

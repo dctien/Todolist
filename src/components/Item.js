@@ -10,6 +10,9 @@ export default class Item extends Component {
         }
         return eleLevel
     }
+    handleDelete(id){
+        this.props.clickDelete(id);
+    }
     render() {
         let {item,index} = this.props
         return (
@@ -19,8 +22,8 @@ export default class Item extends Component {
                 <td className="text-center">{this.showLevel(item.level)}</td>
                 <td>
                     <button type="button" className="btn btn-warning">Edit</button>
-                    <button type="button" className="btn btn-danger">Delete</button>
-                </td>
+                    <button onClick={()=>this.handleDelete(item.id)} type="button" className="btn btn-danger">Delete</button>
+                </td>       
             </tr>
         )
     }

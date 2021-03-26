@@ -5,17 +5,19 @@ import Form from './components/Form'
 import List from './components/List'
 import items from './Mock/Task'
 
-import {filter, includes, orderBy} from 'lodash'
+import {filter, includes, orderBy, remove} from 'lodash'
+
+const { v4: uuidv4 } = require('uuid');
 
 export default class App extends Component {
 	constructor(props){
         super(props)
         this.state = {
-            isShowForm	: false,
-			items		: items,
-			strSearch	: '',
-			sort_by		:'name',
-            sort_dir	:'asc'
+            isShowForm		: false,
+			items			: items,
+			strSearch		: '',
+			sort_by			: 'name',
+            sort_dir		: 'asc',
         }
 		this.handleToogleForm 	= this.handleToogleForm.bind(this)
 		this.handleSearch 		= this.handleSearch.bind(this)
@@ -34,26 +36,51 @@ export default class App extends Component {
 			sort_dir: sort_dir
 		})
 	}
+	handleDelete=(id)=>{
+		let items = this.state.items
+		remove(items,(item)=>{
+			return item.id === id
+		})
+		this.setState({items: items})
+	}
+	handleCancel=()=>{
+		this.setState({isShowForm: false})
+	}
+	handleSubmit=(name, level)=>{
+		let items =this.state.items
+		items.push({
+			id: uuidv4(),
+			name: name,
+			level: level
+		})
+		this.setState({
+			items: items
+		})
+	}
+
 	render() {
 		let {isShowForm, strSearch,sort_by, sort_dir} = this.state
-		let itemOrgin 	= [...this.state.items]
+		let itemOrigin 	= [...this.state.items]
 		let items 		= []
 		let eleForm 	= null
 		
 
-		// // Search item 
-		items = filter(itemOrgin,(item)=>{
+		// Search item 
+		items = filter(itemOrigin,(item)=>{
 			return includes(item.name.toLowerCase(),strSearch.toLowerCase())
 		})
 		
-		// //Sort
+		// Sort
 		items = orderBy(items,[sort_by],[sort_dir])
 
 		if (isShowForm) {
-			eleForm = <Form/>
+			eleForm = <Form 
+							onClickSubmit ={this.handleSubmit}
+							onClickCancel={this.handleCancel}
+						/>
 		}
 		return (
-			<div>
+			<React.Fragment>
 				{/* TITLE : START */}
 				<Title/>
 				{/* TITLE : END */}
@@ -73,8 +100,10 @@ export default class App extends Component {
 				{/* FORM : END */}
 
 				{/* LIST : START */}
-				<List items={items}/>
-			</div>
+				<List 
+					onClickDelete = {this.handleDelete}
+					items={items}/>
+			</React.Fragment>
 		)
 	}
 }

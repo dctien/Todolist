@@ -51,7 +51,7 @@ export default class App extends Component {
 		items.push({
 			id: uuidv4(),
 			name: name,
-			level: level
+			level: +level
 		})
 		this.setState({
 			items: items

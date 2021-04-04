@@ -7,6 +7,8 @@ export default class List extends Component {
         const eleItem = items.map((item,index)=>{
             return(
                 <Item 
+                    onClickEdit = {this.props.onClickEdit}
+                    itemSelected = {this.props.itemSelected}
                     clickDelete = {this.props.onClickDelete}
                     item  = {item}
                     key   = {index}

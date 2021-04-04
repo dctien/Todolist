@@ -3,9 +3,9 @@ import Title from './components/Title'
 import Control from './components/Control'
 import Form from './components/Form'
 import List from './components/List'
-import items from './Mock/Task'
+// import items from './Mock/Task'
 
-import {filter, includes, orderBy, remove} from 'lodash'
+import {filter, includes, orderBy, remove, reject} from 'lodash'
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -14,17 +14,20 @@ export default class App extends Component {
         super(props)
         this.state = {
             isShowForm		: false,
-			items			: items,
+			// items			: items,
+			items			: [],
 			strSearch		: '',
 			sort_by			: 'name',
             sort_dir		: 'asc',
+			itemSelected	: ''
         }
 		this.handleToogleForm 	= this.handleToogleForm.bind(this)
 		this.handleSearch 		= this.handleSearch.bind(this)
     }
 	handleToogleForm(){
 		this.setState({
-			isShowForm: !this.state.isShowForm
+			isShowForm: !this.state.isShowForm,
+			itemSelected: ''
 		})
 	}
 	handleSearch(value){
@@ -46,20 +49,35 @@ export default class App extends Component {
 	handleCancel=()=>{
 		this.setState({isShowForm: false})
 	}
-	handleSubmit=(name, level)=>{
+	handleSubmit=(item)=>{
 		let items =this.state.items
+		let id = ''
+		if (item.id!==''){ //edti
+			items = reject(items, {id: item.id})
+			id = item.id
+		}
+		else{//add
+			id = uuidv4()
+		}
 		items.push({
-			id: uuidv4(),
-			name: name,
-			level: +level
+			id: id,
+			name: item.name,
+			level: +item.level
 		})
 		this.setState({
-			items: items
+			items: items,
+			isShowForm: false
+		})
+	}
+	handleEdit=(item)=>{
+		this.setState({
+			itemSelected: item,
+			isShowForm:true	
 		})
 	}
 
 	render() {
-		let {isShowForm, strSearch,sort_by, sort_dir} = this.state
+		let {isShowForm, strSearch,sort_by, sort_dir, itemSelected} = this.state
 		let itemOrigin 	= [...this.state.items]
 		let items 		= []
 		let eleForm 	= null
@@ -75,9 +93,10 @@ export default class App extends Component {
 
 		if (isShowForm) {
 			eleForm = <Form 
-							onClickSubmit ={this.handleSubmit}
-							onClickCancel={this.handleCancel}
-						/>
+				itemSelected ={itemSelected}
+				onClickSubmit ={this.handleSubmit}
+				onClickCancel={this.handleCancel}
+			/>
 		}
 		return (
 			<React.Fragment>
@@ -101,6 +120,7 @@ export default class App extends Component {
 
 				{/* LIST : START */}
 				<List 
+					onClickEdit = {this.handleEdit}
 					onClickDelete = {this.handleDelete}
 					items={items}/>
 			</React.Fragment>

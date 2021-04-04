@@ -4,10 +4,28 @@ export default class Form extends Component {
     constructor(props){
         super(props)
         this.state ={
+            task_id:'',
             task_name:'',
             task_level:''
+        }     
+    }
+    UNSAFE_componentWillMount=()=>{
+        this.updateItem(this.props.item)
+    }
+    UNSAFE_componentWillReceiveProps=(nextProps)=>{
+        this.updateItem(nextProps.itemSelected)
+    }
+    updateItem(item){
+        let itemSelected = this.props.itemSelected
+        if(itemSelected !==''){
+            this.setState({
+                task_id: itemSelected.id,
+                task_name: itemSelected.name,
+                task_level: itemSelected.level,
+            })
         }
     }
+    
     handleCancel=()=>{
         this.props.onClickCancel()
     }
@@ -22,8 +40,14 @@ export default class Form extends Component {
         });
     }
     handleSubmit=(event)=>{
-        let {task_name,task_level}=this.state
-        this.props.onClickSubmit(task_name,task_level)
+        // let {task_name,task_level}=this.state
+        let item = {
+            id: this.state.task_id,
+            name: this.state.task_name,
+            level: this.state.task_level
+        }
+        // if()
+        this.props.onClickSubmit(item)
         event.preventDefault()
         console.log(this.state.task_name + " - "+ this.state.task_level)
     }
